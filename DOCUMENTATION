@@ -1,0 +1,57 @@
+1. Project Overview
+The Email Triage Assistant is an agentic automation tool designed to manage high-volume email environments. It leverages the Gmail API for data retrieval and GPT-4o for semantic analysis, providing a "triage" layer that summarizes, prioritizes, and drafts responses for incoming communications.
+
+2. Problem Statement
+Professional communication often suffers from "information density," where critical tasks are buried within:
+
+Voluminous Threads: Long conversation histories (50+ messages) that are time-consuming to parse.
+
+High Noise-to-Signal Ratio: Promotional content and automated notifications obscuring urgent human-to-human interaction.
+
+Unstructured Requests: Meeting requests and deadlines that require manual calendar entry.
+
+3. System Architecture
+The application follows a linear data pipeline designed for speed and accuracy.
+
+A. Data Ingestion Layer
+Service: Google Discovery API (Gmail v1).
+
+Method: The system uses the list method with a query filter is:unread to target fresh data.
+
+Authentication: Managed via OAuth 2.0. The application utilizes a local token storage system (token.json) to minimize repeated login prompts while maintaining secure access.
+
+B. The "ScaleDown" Engine (Processing)
+To maintain efficiency and stay within LLM token limits, the engine performs a "ScaleDown" operation:
+
+Context Truncation: The system captures the most relevant portion of the email payload (up to 3000 characters).
+
+Redundancy Filter: Redundant metadata, email signatures, and legal disclaimers are bypassed to focus the model on the conversation's core content.
+
+C. AI Triage Logic (The Brain)
+The core analysis is performed using a single-pass inference strategy. Instead of multiple API calls, the system uses a structured system prompt to extract six distinct data points simultaneously:
+
+Summarization: 85% compression of the original text.
+
+Priority Scoring: A 1-10 urgency rating based on sender context and sentiment.
+
+Categorization: Assignment to "Smart Folders" (e.g., Finance, Social, Work).
+
+Meeting Extraction: Identifying temporal entities (dates/times).
+
+NLG Drafting: Generating a professional, one-sentence response template.
+
+Subscription Audit: Determining if the email originates from a newsletter or mailing list.
+
+4. Technical Specifications
+
+Feature,Implementation
+Language,Python 3.9+
+AI Model,OpenAI GPT-4o (JSON Mode enabled)
+API Protocol,RESTful (Google API Client)
+Security,Environment-based API Key management via python-dotenv
+State Management,OAuth 2.0 token.json
+
+5. Security & Privacy Considerations
+Minimal Scoping: The app uses the gmail.readonly scope, ensuring that the assistant cannot send, delete, or modify emails without a code-level upgrade to a more permissive scope.
+
+Local Processing: Credentials and API keys are stored locally and are excluded from version control via .gitignore to prevent unauthorized access to the developer's Workspace.
