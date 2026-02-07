@@ -1,0 +1,9 @@
+# Sensitive Data - DO NOT REMOVE
+credentials.json
+token.json
+.env
+
+# Python junk
+__pycache__/
+*.pyc
+.venv/
