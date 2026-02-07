@@ -25,25 +25,23 @@ Environment: python-dotenv, google-api-python-client
 ⚙️ Installation & Setup
 Clone the Repository
 
-Bash
-git clone https:
+git clone https://github.com/Samuelmopuri/Email-Triage-Assistant.git
 cd email-triage-assistant
+
 Configuration
 
 Place your credentials.json (from Google Cloud Console) in the root directory.
 
 Create a .env file and add your OpenAI key:
 
-Code snippet
 OPENAI_API_KEY=your_actual_key_here
 Install Dependencies
 
-Bash
 pip install -r requirements.txt
 Run the Assistant
 
-Bash
 python triage.py
+
 🧠 System Architecture
 Ingestion: Connects to the Gmail API to retrieve unread message payloads.
 
